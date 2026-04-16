@@ -1,0 +1,56 @@
+services:
+    app:
+        container_name: app
+        image: serversideup/php:8.5-fpm-nginx
+        restart: unless-stopped
+        ports:
+            - "8080:8080"
+        volumes:
+            - .:/var/www/html
+        networks:
+            - app-net
+
+    horizon:
+        container_name: horizon
+        image: serversideup/php:8.5-fpm-nginx
+        env_file:
+            - .env
+        command: [ "php", "/var/www/html/artisan", "horizon" ]
+        volumes:
+            - .:/var/www/html
+        networks:
+            - app-net
+        depends_on:
+            - redis
+
+    redis:
+        container_name: redis
+        image: redis:alpine
+        restart: always
+        volumes:
+            - redis_data:/data
+        networks:
+            - app-net
+
+    db:
+        container_name: postgres
+        image: postgres:16-alpine
+        restart: always
+        ports:
+            - "5430:5432"
+        environment:
+            POSTGRES_DB: app
+            POSTGRES_USER: username
+            POSTGRES_PASSWORD: password
+        volumes:
+            - db_data:/var/lib/postgresql/data
+        networks:
+            - app-net
+
+networks:
+    app-net:
+        driver: bridge
+
+volumes:
+    db_data:
+    redis_data:
