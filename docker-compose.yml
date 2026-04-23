@@ -1,7 +1,7 @@
 services:
     app:
         container_name: app
-        image: serversideup/php:8.5-fpm-nginx
+        image: serversideup/php:8.4-fpm-nginx
         restart: unless-stopped
         ports:
             - "8080:8080"
@@ -12,7 +12,7 @@ services:
 
     horizon:
         container_name: horizon
-        image: serversideup/php:8.5-fpm-nginx
+        image: serversideup/php:8.4-fpm-nginx
         env_file:
             - .env
         command: [ "php", "/var/www/html/artisan", "horizon" ]
