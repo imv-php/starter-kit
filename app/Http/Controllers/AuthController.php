@@ -22,4 +22,9 @@ readonly class AuthController
     {
         return UserResource::make(auth()->user());
     }
+
+    public function logout()
+    {
+        return $this->service->logout();
+    }
 }

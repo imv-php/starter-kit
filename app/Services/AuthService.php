@@ -65,4 +65,16 @@ class AuthService
             ];
         });
     }
+
+    /**
+     * @throws Exception
+     */
+    public function logout(): bool
+    {
+        try {
+            return auth()->user()->currentAccessToken()->delete();
+        } catch (Exception $e) {
+            throw new Exception('Tizimdan chiqishda muammo: '.$e->getMessage());
+        }
+    }
 }
