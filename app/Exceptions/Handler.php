@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Throwable;
-use Symfony\Component\HttpFoundation\Response;
 
 class Handler extends \Illuminate\Foundation\Exceptions\Handler
 {
@@ -17,36 +19,36 @@ class Handler extends \Illuminate\Foundation\Exceptions\Handler
         if ($request->is('api/*') || $request->expectsJson()) {
             return match (true) {
                 $e instanceof AuthenticationException => response()->json([
-                    'status' => 'error',
+                    'status'  => 'error',
                     'message' => 'Unauthorized Request.',
-                    'errors' => null,
+                    'errors'  => null,
                 ], Response::HTTP_UNAUTHORIZED),
 
                 $e instanceof ValidationException => response()->json([
-                    'status' => 'error',
+                    'status'  => 'error',
                     'message' => 'Validation failed.',
-                    'errors' => $e->errors(),
+                    'errors'  => $e->errors(),
                 ], Response::HTTP_UNPROCESSABLE_ENTITY),
 
                 $e instanceof NotFoundHttpException, $e instanceof RouteNotFoundException => response()->json([
-                    'status' => 'error',
+                    'status'  => 'error',
                     'message' => $e->getMessage() ?: 'Route not found.',
-                    'errors' => null,
+                    'errors'  => null,
                 ], Response::HTTP_NOT_FOUND),
 
                 $e instanceof HttpException => response()->json([
-                    'status' => 'error',
+                    'status'  => 'error',
                     'message' => $e->getMessage() ?: 'Http Error',
-                    'errors' => null,
+                    'errors'  => null,
                 ], $e->getStatusCode()),
 
                 default => response()->json([
-                    'status' => 'error',
+                    'status'  => 'error',
                     'message' => $e->getMessage() ?: 'An unexpected error occurred.',
-                    'errors' => env('APP_DEBUG') ? [
+                    'errors'  => env('APP_DEBUG') ? [
                         'exception' => get_class($e),
-                        'file' => $e->getFile(),
-                        'line' => $e->getLine(),
+                        'file'      => $e->getFile(),
+                        'line'      => $e->getLine(),
                     ] : null,
                 ], Response::HTTP_INTERNAL_SERVER_ERROR),
             };

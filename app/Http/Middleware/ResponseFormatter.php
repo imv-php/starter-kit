@@ -1,20 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 use App\Helpers\ResponseFormatterHelper;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ResponseFormatter
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $response = $next($request);
+        $response   = $next($request);
         $statusCode = $response->getStatusCode();
 
         // 1. Skip formatting for certain response types
@@ -26,7 +28,7 @@ class ResponseFormatter
             return $response;
         }
 
-        if (!$request->is('api/*') && !$request->expectsJson()) {
+        if (! $request->is('api/*') && ! $request->expectsJson()) {
             return $response;
         }
 
@@ -34,8 +36,6 @@ class ResponseFormatter
             return $response;
         }
 
-        // 2. Extract data from the response
-        $data = null;
         if ($response instanceof JsonResponse) {
             $data = $response->getData(true);
         } else {

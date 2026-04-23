@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'base_url' => env('GATEWAY_BASE_URL', ''),
     'username' => env('GATEWAY_USERNAME', ''),

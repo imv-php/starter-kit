@@ -3,12 +3,25 @@ services:
         container_name: app
         image: serversideup/php:8.4-fpm-nginx
         restart: unless-stopped
+        env_file:
+            - .env
+        environment:
+            AUTORUN_ENABLED: "true"
+            AUTORUN_LARAVEL_MIGRATION: "true"
+            AUTORUN_LARAVEL_MIGRATION_FORCE: "true"
+            AUTORUN_LARAVEL_MIGRATION_ISOLATION: "true"
+            AUTORUN_LARAVEL_MIGRATION_TIMEOUT: "60"
         ports:
             - "8080:8080"
         volumes:
             - .:/var/www/html
         networks:
             - app-net
+        depends_on:
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
 
     horizon:
         container_name: horizon
@@ -22,6 +35,7 @@ services:
             - app-net
         depends_on:
             - redis
+            - app
 
     redis:
         container_name: redis
@@ -31,6 +45,11 @@ services:
             - redis_data:/data
         networks:
             - app-net
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 5s
+            timeout: 3s
+            retries: 5
 
     db:
         container_name: postgres
@@ -46,6 +65,11 @@ services:
             - db_data:/var/lib/postgresql/data
         networks:
             - app-net
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U username -d app"]
+            interval: 5s
+            timeout: 3s
+            retries: 10
 
 networks:
     app-net:

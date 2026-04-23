@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers;
 
 class ResponseFormatterHelper
@@ -10,7 +12,7 @@ class ResponseFormatterHelper
     public static function success($data = null, string $message = '', int $code = 200): array
     {
         return [
-            'success'  => true,
+            'success' => true,
             'message' => $message,
             'data'    => $data,
         ];
@@ -22,7 +24,7 @@ class ResponseFormatterHelper
     public static function error(string $message = '', int $code = 400, $errors = null): array
     {
         return [
-            'success'  => false,
+            'success' => false,
             'message' => $message,
             'errors'  => $errors,
         ];
@@ -34,7 +36,7 @@ class ResponseFormatterHelper
     public static function paginated($data, string $message = ''): array
     {
         $responseData = [
-            'success'  => true,
+            'success' => true,
             'message' => $message,
             'data'    => [],
             'meta'    => [],
