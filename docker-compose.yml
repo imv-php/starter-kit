@@ -1,7 +1,9 @@
 services:
     app:
         container_name: app
-        image: serversideup/php:8.4-fpm-nginx
+        build:
+            context: .
+            dockerfile: Dockerfile
         restart: unless-stopped
         env_file:
             - .env
@@ -25,7 +27,9 @@ services:
 
     horizon:
         container_name: horizon
-        image: serversideup/php:8.4-fpm-nginx
+        build:
+            context: .
+            dockerfile: Dockerfile
         env_file:
             - .env
         command: [ "php", "/var/www/html/artisan", "horizon" ]

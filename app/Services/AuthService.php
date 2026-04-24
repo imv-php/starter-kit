@@ -11,11 +11,13 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Imv\Sso\Facades\Sso;
+use Throwable;
 
 class AuthService
 {
     /**
      * @throws Exception
+     * @throws Throwable
      */
     public function login(LoginDto $dto): array
     {

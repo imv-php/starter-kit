@@ -22,9 +22,9 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (Throwable $e, Request $request) {
-            $handler = app(Handler::class);
-
-            return $handler->render($request, $e);
-        });
+//        $exceptions->render(function (Throwable $e, Request $request) {
+//            $handler = app(Handler::class);
+//
+//            return $handler->render($request, $e);
+//        });
     })->create();
