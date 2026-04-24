@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\Users\Schemas;
 
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -24,7 +25,7 @@ class UserForm
                     ->required(),
                 TextInput::make('pinfl')
                     ->required(),
-                Select::make('roles')->multiple()->relationship('roles', 'name')
+                Select::make('roles')->multiple()->relationship('roles', 'name'),
             ]);
     }
 }
